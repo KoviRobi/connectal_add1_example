@@ -1,6 +1,8 @@
 @title Single-threaded incrementer example
 @code_type bsv .bsv
 
+@add_css bsv_no_comment.css
+
 @s Overview
 This describes a simple increment FPGA 'service'. The BlueSpec part of the
 service is:

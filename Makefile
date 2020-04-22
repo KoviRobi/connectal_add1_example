@@ -7,3 +7,4 @@ docs: add1_single_threaded.lit
 	rm -r docs
 	lit -w index.lit
 	mv _book docs
+	mv "docs/Simple incrementer examples_contents.html" docs/index.html
