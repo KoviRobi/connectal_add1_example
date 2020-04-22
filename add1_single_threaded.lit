@@ -1,5 +1,4 @@
 @title Single-threaded incrementer example
-@code_type bsv .bsv
 
 @add_css bsv_no_comment.css
 

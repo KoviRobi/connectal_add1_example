@@ -51,7 +51,7 @@ service is:
 
 <div class="codeblock">
 <span class="codeblock_name">{<strong>AddOne.bsv</strong> <a href="add1_single_threaded.html#1:1">1</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 import FIFO::*;
 
 typedef Bit#(64) DataT;
@@ -85,7 +85,7 @@ what is used to call back from hardware into software.
 
 <div class="codeblock">
 <span class="codeblock_name">{<strong>Makefile.inc</strong> <a href="add1_single_threaded.html#1:1">1</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 CONNECTALDIR ?= ./connectal # path to git checkout of Connectal
 
 <span class="nocode pln">{Software to hardware calls, <a href="add1_single_threaded.html#1:2">2</a>}</span>
@@ -105,7 +105,7 @@ include $(CONNECTALDIR)/Makefile.connectal
 
 <div class="codeblock">
 <span class="codeblock_name">{<strong>send_number.cpp</strong> <a href="add1_single_threaded.html#1:1">1</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 #include &lt;iostream&gt; // std::cout, std::cerr,  std::endl
 #include &lt;cstdlib&gt;  // sdt::exit, std::atoi
 
@@ -145,7 +145,7 @@ interface to do this. Remember, this is the <code>AddOne</code> interface argume
 
 <div class="codeblock">
 <span class="codeblock_name">{Interfaces <a href="add1_single_threaded.html#1:2">2</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 interface Add1Request;
   method Action add1(DataT n);
 endinterface
@@ -165,7 +165,7 @@ space-separated list of pairs. Each pair is of the form
 
 <div class="codeblock">
 <span class="codeblock_name">{Software to hardware calls <a href="add1_single_threaded.html#1:2">2</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 S2H_INTERFACES = Add1Request:AddOne.request
 </pre>
 
@@ -187,7 +187,7 @@ build.bluesim</code> automatically does the <code>gen.bluesim</code> make target
 
 <div class="codeblock">
 <span class="codeblock_name">{C++ Includes <a href="add1_single_threaded.html#1:2">2</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 #include "Add1Request.h" // Add1RequestProxy
 </pre>
 <p class="seealso">Added to in section <a href="add1_single_threaded.html#1:3">3</a></p>
@@ -201,7 +201,7 @@ enum from <code>${BOARD}/bluesim/jni/topEnum.h</code>.
 
 <div class="codeblock">
 <span class="codeblock_name">{C++ Initialisation <a href="add1_single_threaded.html#1:2">2</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 Add1RequestProxy *requestProxy = new Add1RequestProxy(IfcNames_Add1RequestS2H);
 </pre>
 <p class="seealso">Added to in section <a href="add1_single_threaded.html#1:3">3</a></p>
@@ -211,7 +211,7 @@ Add1RequestProxy *requestProxy = new Add1RequestProxy(IfcNames_Add1RequestS2H);
 
 <div class="codeblock">
 <span class="codeblock_name">{Send the number from `send` <a href="add1_single_threaded.html#1:2">2</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 std::cout &lt;&lt; "Sending: " &lt;&lt; send &lt;&lt; std::endl;
 requestProxy-&gt;add1(send);
 </pre>
@@ -227,7 +227,7 @@ implement.
 
 <div class="codeblock">
 <span class="codeblock_name">{Put data onto `incoming` <a href="add1_single_threaded.html#1:2">2</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 interface Add1Request request;
   method Action add1(DataT n);
     incoming.enq(n);
@@ -253,7 +253,7 @@ of the communication interface.
 
 <div class="codeblock">
 <span class="codeblock_name">{Interfaces <a href="add1_single_threaded.html#1:2">2</a>} +=</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 interface Add1Response;
   method Action getResult(DataT n_plus_1);
 endinterface
@@ -268,7 +268,7 @@ space-separated list of <code>hardware-interface:software-interface</code> inste
 
 <div class="codeblock">
 <span class="codeblock_name">{Hardware to software calls <a href="add1_single_threaded.html#1:3">3</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 H2S_INTERFACES = AddOne:Add1Response
 </pre>
 
@@ -283,7 +283,7 @@ interface.
 
 <div class="codeblock">
 <span class="codeblock_name">{C++ Includes <a href="add1_single_threaded.html#1:2">2</a>} +=</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 #include "Add1Response.h" // Add1ResponseWrapper
 #include "portal.h" // PortalPoller
 </pre>
@@ -303,7 +303,7 @@ paper</a>)
 
 <div class="codeblock">
 <span class="codeblock_name">{C++ Initialisation <a href="add1_single_threaded.html#1:2">2</a>} +=</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 PortalPoller *poller = new PortalPoller();
 Add1Response response(IfcNames_Add1ResponseH2S);
 </pre>
@@ -314,7 +314,7 @@ Add1Response response(IfcNames_Add1ResponseH2S);
 
 <div class="codeblock">
 <span class="codeblock_name">{Wait for the response, put it into `responseValue` <a href="add1_single_threaded.html#1:3">3</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 while (!response.hasReceived()) {
   poller-&gt;event();
 }
@@ -331,7 +331,7 @@ response
 
 <div class="codeblock">
 <span class="codeblock_name">{Hardware response object <a href="add1_single_threaded.html#1:3">3</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 class Add1Response : public Add1ResponseWrapper {
   private: 
     bool received = false;
@@ -357,7 +357,7 @@ class Add1Response : public Add1ResponseWrapper {
 
 <div class="codeblock">
 <span class="codeblock_name">{Take data off `outgoing` <a href="add1_single_threaded.html#1:3">3</a>}</span>
-<pre class="prettyprint lang-bsv">
+<pre class="prettyprint">
 rule response;
   response.getResult(outgoing.first);
   outgoing.deq;
