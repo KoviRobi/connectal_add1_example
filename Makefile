@@ -1,6 +1,9 @@
-include Makefile.inc
+add1_single_threaded: add1_single_threaded.lit
+	test -d add1_single_threaded || mkdir add1_single_threaded
+	lit -t add1_single_threaded.lit -odir add1_single_threaded
+	echo 'include Makefile.inc' > add1_single_threaded/Makefile
 
-Makefile.inc AddOne.bsv send_number.cpp: add1_single_threaded.lit
-	lit -t add1_single_threaded.lit
-add1_single_threaded.html: add1_single_threaded.lit
-	lit -w add1_single_threaded.lit
+docs: add1_single_threaded.lit
+	rm -r docs
+	lit -w index.lit
+	mv _book docs

@@ -1,4 +1,4 @@
-@title Simple incrementer example
+@title Single-threaded incrementer example
 @code_type bsv .bsv
 
 @s Overview

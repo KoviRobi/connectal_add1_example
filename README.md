@@ -1,6 +1,8 @@
 To just test out in simulation, do
 ```sh
 $ nix-shell # to set things up correctly
+$ make add1_single_threaded # if the directory add1_single_threaded doesn't exist
+$ cd add1_single_threaded
 $ make build.bluesim
 $ ./bluesim/bin/ubuntu.exe <number>
 ```
