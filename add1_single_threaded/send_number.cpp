@@ -40,14 +40,11 @@ int main(int argc, char** argv) {
   requestProxy->add1(send);
 
 
-  DataT responseValue;
   while (!response.hasReceived()) {
     poller->event();
   }
   response.clearReceived();
 
-
-  std::cout << "Received: " << responseValue;
   return 0;
 }
 

@@ -65,10 +65,7 @@ int main(int argc, char** argv) {
 
   @{Send the number from `send`}
 
-  DataT responseValue;
-  @{Wait for the response, put it into `responseValue`}
-
-  std::cout << "Received: " << responseValue;
+  @{Wait for the response}
   return 0;
 }
 ---
@@ -183,15 +180,19 @@ PortalPoller *poller = new PortalPoller();
 Add1Response response(IfcNames_Add1ResponseH2S);
 ---
 
---- Wait for the response, put it into `responseValue`
+When there is a response, the poller will call the method on the `response`
+object.
+
+--- Wait for the response
 while (!response.hasReceived()) {
   poller->event();
 }
 response.clearReceived();
 ---
 
-The response object only needs to implement the `getResult` method, but so that
-we don't poll forever, it also has a flag to indicate if polling resulted in a
+The `response` object only needs to implement the `getResult` method, but so
+that we don't poll forever, it also has a flag to indicate if polling resulted
+in a
 response
 --- Hardware response object
 class Add1Response : public Add1ResponseWrapper {

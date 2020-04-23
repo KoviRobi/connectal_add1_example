@@ -50,13 +50,13 @@ service is:
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{<strong>AddOne.bsv</strong> <a href="add1_single_threaded.html#1:1">1</a>}</span>
+<span class="codeblock_name">{<strong>AddOne.bsv</strong> <a href="add1_multi_threaded.html#2:1">2:1</a>}</span>
 <pre class="prettyprint">
 import FIFO::*;
 
 typedef Bit#(64) DataT;
 
-<span class="nocode pln">{Interfaces, <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="nocode pln">{Interfaces, <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 
 module mkAddOne#(Add1Response response)(AddOne);
   FIFO#(DataT) incoming &lt;- mkFIFO;
@@ -67,8 +67,8 @@ module mkAddOne#(Add1Response response)(AddOne);
     incoming.deq;
   endrule
 
-<span class="nocode pln">  {Take data off `outgoing`, <a href="add1_single_threaded.html#1:3">3</a>}</span>
-<span class="nocode pln">  {Put data onto `incoming`, <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="nocode pln">  {Take data off `outgoing`, <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
+<span class="nocode pln">  {Put data onto `incoming`, <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 endmodule
 </pre>
 
@@ -84,12 +84,12 @@ what is used to call back from hardware into software.
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{<strong>Makefile.inc</strong> <a href="add1_single_threaded.html#1:1">1</a>}</span>
+<span class="codeblock_name">{<strong>Makefile.inc</strong> <a href="add1_multi_threaded.html#2:1">2:1</a>}</span>
 <pre class="prettyprint">
 CONNECTALDIR ?= ./connectal # path to git checkout of Connectal
 
-<span class="nocode pln">{Software to hardware calls, <a href="add1_single_threaded.html#1:2">2</a>}</span>
-<span class="nocode pln">{Hardware to software calls, <a href="add1_single_threaded.html#1:3">3</a>}</span>
+<span class="nocode pln">{Software to hardware calls, <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
+<span class="nocode pln">{Hardware to software calls, <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
 
 BSVFILES = AddOne.bsv
 CPPFILES = send_number.cpp
@@ -104,15 +104,15 @@ include $(CONNECTALDIR)/Makefile.connectal
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{<strong>send_number.cpp</strong> <a href="add1_single_threaded.html#1:1">1</a>}</span>
+<span class="codeblock_name">{<strong>send_number.cpp</strong> <a href="add1_multi_threaded.html#2:1">2:1</a>}</span>
 <pre class="prettyprint">
 #include &lt;iostream&gt; // std::cout, std::cerr,  std::endl
 #include &lt;cstdlib&gt;  // sdt::exit, std::atoi
 
 #include "GeneratedTypes.h" // DataT
-<span class="nocode pln">{C++ Includes, <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="nocode pln">{C++ Includes, <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 
-<span class="nocode pln">{Hardware response object, <a href="add1_single_threaded.html#1:3">3</a>}</span>
+<span class="nocode pln">{Hardware response object, <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
 
 int main(int argc, char** argv) {
   if (argc &lt; 2) {
@@ -121,14 +121,11 @@ int main(int argc, char** argv) {
   }
   DataT send = atoi(argv[1]);
 
-<span class="nocode pln">  {C++ Initialisation, <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="nocode pln">  {C++ Initialisation, <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 
-<span class="nocode pln">  {Send the number from `send`, <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="nocode pln">  {Send the number from `send`, <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 
-  DataT responseValue;
-<span class="nocode pln">  {Wait for the response, put it into `responseValue`, <a href="add1_single_threaded.html#1:3">3</a>}</span>
-
-  std::cout &lt;&lt; "Received: " &lt;&lt; responseValue;
+<span class="nocode pln">  {Wait for the response, <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
   return 0;
 }
 </pre>
@@ -144,7 +141,7 @@ interface to do this. Remember, this is the <code>AddOne</code> interface argume
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Interfaces <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="codeblock_name">{Interfaces <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 <pre class="prettyprint">
 interface Add1Request;
   method Action add1(DataT n);
@@ -154,9 +151,9 @@ interface AddOne;
   interface Add1Request request;
 endinterface
 </pre>
-<p class="seealso">Added to in section <a href="add1_single_threaded.html#1:3">3</a></p>
+<p class="seealso">Added to in sections <a href="add1_single_threaded.html#1:3">3</a> and <a href="add1_multi_threaded.html#2:3">2:3</a></p>
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>Then we tell Connectal of this interface, via the Makefile. This is a
 space-separated list of pairs. Each pair is of the form
@@ -164,13 +161,13 @@ space-separated list of pairs. Each pair is of the form
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Software to hardware calls <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="codeblock_name">{Software to hardware calls <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 <pre class="prettyprint">
 S2H_INTERFACES = Add1Request:AddOne.request
 </pre>
 
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>The software-interface part should also be a BlueSpec interface, as Connectal
 parses the BSV file for it, and generates the C++ class based on it.
@@ -186,13 +183,13 @@ build.bluesim</code> automatically does the <code>gen.bluesim</code> make target
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{C++ Includes <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="codeblock_name">{C++ Includes <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 <pre class="prettyprint">
 #include "Add1Request.h" // Add1RequestProxy
 </pre>
-<p class="seealso">Added to in section <a href="add1_single_threaded.html#1:3">3</a></p>
+<p class="seealso">Added to in sections <a href="add1_single_threaded.html#1:3">3</a> and <a href="add1_multi_threaded.html#2:3">2:3</a></p>
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>To use this proxy object in C++, we need to create it and then we can call the
 <code>add1</code> method on it. The <code>IfcNames_Add1RequestS2H</code> is part of the <code>IfcNames</code>
@@ -200,24 +197,24 @@ enum from <code>${BOARD}/bluesim/jni/topEnum.h</code>.
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{C++ Initialisation <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="codeblock_name">{C++ Initialisation <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 <pre class="prettyprint">
 Add1RequestProxy *requestProxy = new Add1RequestProxy(IfcNames_Add1RequestS2H);
 </pre>
-<p class="seealso">Added to in section <a href="add1_single_threaded.html#1:3">3</a></p>
+<p class="seealso">Added to in sections <a href="add1_single_threaded.html#1:3">3</a> and <a href="add1_multi_threaded.html#2:3">2:3</a></p>
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 
 <div class="codeblock">
-<span class="codeblock_name">{Send the number from `send` <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="codeblock_name">{Send the number from `send` <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 <pre class="prettyprint">
 std::cout &lt;&lt; "Sending: " &lt;&lt; send &lt;&lt; std::endl;
 requestProxy-&gt;add1(send);
 </pre>
 
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>Then in BlueSpec land, to receive this number from the software, remember that
 the <code>mkAddOne</code> module/<code>AddOne</code> interface contains the <code>Add1Request</code> interface
@@ -226,7 +223,7 @@ implement.
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Put data onto `incoming` <a href="add1_single_threaded.html#1:2">2</a>}</span>
+<span class="codeblock_name">{Put data onto `incoming` <a href="add1_multi_threaded.html#2:2">2:2</a>}</span>
 <pre class="prettyprint">
 interface Add1Request request;
   method Action add1(DataT n);
@@ -236,7 +233,7 @@ endinterface
 </pre>
 
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>That's it from the software to hardware side.
 </p>
@@ -252,28 +249,28 @@ of the communication interface.
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Interfaces <a href="add1_single_threaded.html#1:2">2</a>} +=</span>
+<span class="codeblock_name">{Interfaces <a href="add1_multi_threaded.html#2:2">2:2</a>} +=</span>
 <pre class="prettyprint">
 interface Add1Response;
   method Action getResult(DataT n_plus_1);
 endinterface
 </pre>
+<p class="seealso">Added to in section <a href="add1_multi_threaded.html#2:3">2:3</a></p>
 
-
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>The syntax of <code>H2S_INTERFACES</code> is similar to <code>S2H_INTERFACES</code>, except it is a
 space-separated list of <code>hardware-interface:software-interface</code> instead.
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Hardware to software calls <a href="add1_single_threaded.html#1:3">3</a>}</span>
+<span class="codeblock_name">{Hardware to software calls <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
 <pre class="prettyprint">
 H2S_INTERFACES = AddOne:Add1Response
 </pre>
 
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>The hardware-interface part is still the argument to the <code>mkAddOne</code> module, but
 the software-interface part is the parameter to the <code>mkAddOne</code> module. And
@@ -282,14 +279,14 @@ interface.
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{C++ Includes <a href="add1_single_threaded.html#1:2">2</a>} +=</span>
+<span class="codeblock_name">{C++ Includes <a href="add1_multi_threaded.html#2:2">2:2</a>} +=</span>
 <pre class="prettyprint">
 #include "Add1Response.h" // Add1ResponseWrapper
 #include "portal.h" // PortalPoller
 </pre>
+<p class="seealso">Added to in section <a href="add1_multi_threaded.html#2:3">2:3</a></p>
 
-
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>Though this time, it's not the generated proxy object that we are interested
 in, but the abstract wrapper object that the hardware will 'call'. Remember
@@ -302,18 +299,21 @@ paper</a>)
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{C++ Initialisation <a href="add1_single_threaded.html#1:2">2</a>} +=</span>
+<span class="codeblock_name">{C++ Initialisation <a href="add1_multi_threaded.html#2:2">2:2</a>} +=</span>
 <pre class="prettyprint">
 PortalPoller *poller = new PortalPoller();
 Add1Response response(IfcNames_Add1ResponseH2S);
 </pre>
+<p class="seealso">Added to in section <a href="add1_multi_threaded.html#2:3">2:3</a></p>
 
-
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
+<p>When there is a response, the poller will call the method on the <code>response</code>
+object.
+</p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Wait for the response, put it into `responseValue` <a href="add1_single_threaded.html#1:3">3</a>}</span>
+<span class="codeblock_name">{Wait for the response <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
 <pre class="prettyprint">
 while (!response.hasReceived()) {
   poller-&gt;event();
@@ -322,15 +322,16 @@ response.clearReceived();
 </pre>
 
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
-<p>The response object only needs to implement the <code>getResult</code> method, but so that
-we don't poll forever, it also has a flag to indicate if polling resulted in a
+<p>The <code>response</code> object only needs to implement the <code>getResult</code> method, but so
+that we don't poll forever, it also has a flag to indicate if polling resulted
+in a
 response
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Hardware response object <a href="add1_single_threaded.html#1:3">3</a>}</span>
+<span class="codeblock_name">{Hardware response object <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
 <pre class="prettyprint">
 class Add1Response : public Add1ResponseWrapper {
   private: 
@@ -350,13 +351,13 @@ class Add1Response : public Add1ResponseWrapper {
 </pre>
 
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 <p>And the hardware calls the software when there is any outgoing data.
 </p>
 
 <div class="codeblock">
-<span class="codeblock_name">{Take data off `outgoing` <a href="add1_single_threaded.html#1:3">3</a>}</span>
+<span class="codeblock_name">{Take data off `outgoing` <a href="add1_multi_threaded.html#2:3">2:3</a>}</span>
 <pre class="prettyprint">
 rule response;
   response.getResult(outgoing.first);
@@ -365,7 +366,7 @@ endrule
 </pre>
 
 
-<p class="seealso">Used in section <a href="add1_single_threaded.html#1:1">1</a></p>
+<p class="seealso">Used in sections <a href="add1_single_threaded.html#1:1">1</a> and <a href="add1_multi_threaded.html#2:1">2:1</a></p>
 </div>
 </div>
 <a name="1:4"><div class="section"><h4>4. Trying it out with BlueSim</h4></a>
@@ -374,4 +375,4 @@ endrule
 </p>
 
 </div>
-<br></body>
+<br><a style="float:right;" class="chapter-nav" href="add1_multi_threaded.html">Next Chapter</a></body>
